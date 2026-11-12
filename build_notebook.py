@@ -23,8 +23,7 @@ cells.append(md('''# Identificación de microalgas y organismos acuáticos con T
 
 Cuaderno para entrenar un modelo que **identifique microalgas y otros organismos
 acuáticos en fotos de microscopio**, y para **contar células** y estimar la
-densidad de un cultivo. Corre en **Google Colab (nivel gratuito, GPU T4)**:
-nada se entrena en tu computadora.
+densidad de un cultivo. Corre en **Google Colab (nivel gratuito, GPU T4)**.
 
 **Las dos tareas del proyecto**
 
@@ -40,7 +39,7 @@ nada se entrena en tu computadora.
   41 tipos de microorganismos + "unknown", 13,216 objetos etiquetados.
   Licencia CC BY 4.0. Incluye *Chlorella* y *Scenedesmus*.
 - **WHOI-Plankton** (referencia): >3.5 millones de imágenes, 103 categorías.
-  Su descarga directa está bloqueada por un captcha (verificado), así que
+  Su descarga directa está bloqueada por un captcha, así que
   en este cuaderno **no** se descarga: se documenta cómo obtenerla a mano.
 - **Tus fotos:** fotos de microscopio de tus cultivos de *Chlorella vulgaris*
   y *Scenedesmus acutus*, en tu Drive. Son las clases propias del proyecto.
@@ -61,24 +60,26 @@ nada se entrena en tu computadora.
 
 cells.append(md('''## Antes de empezar: qué necesitas
 
-1. Una cuenta de Google y abrir este cuaderno en **Colab** (Entorno de
-   ejecución → Cambiar tipo de entorno → **GPU**).
-2. En tu Google Drive, la carpeta `microalgas-ia/` con esta estructura
-   (el cuaderno crea lo que falta):
+1. Una cuenta de Google. Abre este cuaderno en **Colab** (Entorno de
+   ejecución → Cambiar tipo de entorno → **GPU**). Todo el entrenamiento
+   se hace en Colab, con su GPU gratuita; en tu MacBook solo abres el
+   cuaderno en el navegador.
+2. Tus fotos en tu Google Drive, en `microalgas-ia/fotos/<clase>/` (una
+   subcarpeta por clase):
 
 ```
 Drive/microalgas-ia/
-├── fotos/                  # TUS fotos (opcional al inicio)
-│   ├── Chlorella_vulgaris/      # una subcarpeta por clase
+├── fotos/                  # tus fotos de microscopio
+│   ├── Chlorella_vulgaris/
 │   └── Scenedesmus_acutus/
 ├── recortes/               # lo genera el cuaderno (EMDS-7 por clase)
 ├── splits/                 # train / val / test (lo genera el cuaderno)
 └── modelos/                # modelo .h5 y .tflite (lo genera el cuaderno)
 ```
 
-3. El repositorio de GitHub `ozono7/microalgas-ia` (ahí viven este cuaderno,
+3. El repositorio `ozono7/microalgas-ia` en GitHub (ahí viven este cuaderno,
    `datos.py`, el `README.md` y el `indice-clases.csv`). El cuaderno lo clona
-   solo; si aún no existe en GitHub, importa `datos.py` desde Drive.
+   solo.
 '''))
 
 cells.append(code('''# 0. Comprobar GPU y versiones
@@ -95,7 +96,7 @@ except Exception as e:
     print("nvidia-smi no disponible:", e)
 '''.strip()))
 
-cells.append(code('''# 1. Montar Drive y clonar el repo (o usar datos.py desde Drive)
+cells.append(code('''# 1. Montar Drive y clonar el repo
 import os
 import sys
 import subprocess
@@ -110,16 +111,10 @@ if not os.path.exists(os.path.join(REPO_DIR, "datos.py")):
                         REPO_DIR], capture_output=True, text=True)
     print(r.stdout[-500:] if r.stdout else "")
     print(r.stderr[-500:] if r.stderr else "")
-if os.path.exists(os.path.join(REPO_DIR, "datos.py")):
-    sys.path.insert(0, REPO_DIR)
-    print("datos.py cargado desde el repo:", REPO_DIR)
-elif os.path.exists("/content/drive/MyDrive/microalgas-ia/datos.py"):
-    sys.path.insert(0, "/content/drive/MyDrive/microalgas-ia")
-    print("datos.py cargado desde Drive (el repo aún no existe en GitHub).")
-else:
+if not os.path.exists(os.path.join(REPO_DIR, "datos.py")):
     raise FileNotFoundError(
-        "No se encontró datos.py: crea el repo ozono7/microalgas-ia en "
-        "GitHub o sube datos.py a Drive/microalgas-ia/.")
+        "No se encontró datos.py en /content/microalgas-ia.")
+sys.path.insert(0, REPO_DIR)
 
 import datos
 print("Módulo datos OK — EMDS-7:", datos.EMDS7_FIGSHARE_ARTICLE_ID)
@@ -129,7 +124,7 @@ cells.append(md('''## 2. Descargar EMDS-7 (colección pública principal)
 
 - **Qué es:** Environmental Microorganism Image Dataset v7 (Yang et al.
   2023, *Front. Microbiol.* 14:1084312, doi:10.3389/fmicb.2023.1084312).
-- **Contenido verificado:** 2,365 imágenes, 42 categorías (41 nombradas +
+- **Contenido:** 2,365 imágenes, 42 categorías (41 nombradas +
   "unknown"), 13,216 objetos etiquetados con cajas (XML, formato Pascal VOC).
 - **Licencia:** CC BY 4.0 (uso no comercial con atribución).
 - **Tamaño:** el zip pesa ~5.3 GB. Se descarga al disco **efímero** de Colab
@@ -224,10 +219,10 @@ cells.append(md('''## 5. WHOI-Plankton (referencia: descarga manual, no automát
 plancton anotado más grande: >3.5 millones de imágenes en 103 categorías,
 tomadas con el Imaging FlowCytobot en Martha's Vineyard.
 
-**Verificado en este proyecto (2026-11-12): la descarga directa NO funciona
-de forma automática.** El archivo (DOI 10.1575/1912/7341) redirige a una
-página con captcha, y los enlaces directos por año también. Por eso este
-cuaderno **no intenta descargarlo**: lo documenta para obtenerlo a mano:
+La descarga directa **no funciona de forma automática**: el archivo
+(DOI 10.1575/1912/7341) redirige a una página con captcha, y los enlaces
+directos por año también. Por eso este cuaderno **no intenta descargarlo**:
+lo documenta para obtenerlo a mano:
 
 1. Entrar a https://github.com/hsosik/WHOI-Plankton (DOI 10.1575/1912/7341).
 2. Descargar a mano el año que quieras (2006–2014) y subir el zip a
@@ -236,12 +231,12 @@ cuaderno **no intenta descargarlo**: lo documenta para obtenerlo a mano:
 
 También existe **Plankton Set 1.0** (National Data Science Bowl 2015, NCEI
 accesión 0127422, DOI 10.7289/v5d21vjd, 121 clases): su enlace de descarga
-de NCEI es un disparador web, no un archivo directo, y su FTP no devolvió
-listado; por eso tampoco se descarga aquí. Si lo consigues (Kaggle, con
-cuenta), sus imágenes van a `recortes/<clase>/` igual que tus fotos.
+de NCEI es un disparador web, no un archivo directo; por eso tampoco se
+descarga aquí. Si lo consigues (Kaggle, con cuenta), sus imágenes van a
+`recortes/<clase>/` igual que tus fotos.
 '''))
 
-cells.append(code('''# 5. Enlaces verificados de WHOI-Plankton (solo informativos)
+cells.append(code('''# 5. Enlaces de WHOI-Plankton (solo informativos)
 print("WHOI-Plankton — repositorio y DOI:")
 print("  https://github.com/hsosik/WHOI-Plankton")
 print("  http://dx.doi.org/10.1575/1912/7341")
@@ -468,8 +463,8 @@ Ejemplo: 120 células en un cuadro grande de la cámara de Neubauer
 nada: anota siempre con qué aumento y qué cámara se tomó la foto.
 
 Abajo se demuestra con una **imagen sintética** (células oscuras sobre
-fondo claro, como en campo claro) para que la celda corra sin fotos reales. Después, la misma función
-corre sobre tus fotos de Drive.
+fondo claro, como en campo claro). Después, la misma función corre sobre
+tus fotos de Drive.
 '''))
 
 cells.append(code('''# 11. Conteo de células: demo con imagen sintética + tu foto (si hay)

@@ -27,7 +27,7 @@ import xml.etree.ElementTree as ET
 #   doi:10.3389/fmicb.2023.1084312
 # Figshare: https://figshare.com/articles/dataset/EMDS-7_DataSet/16869571
 #   DOI del conjunto: 10.6084/m9.figshare.16869571.v1 — Licencia: CC BY 4.0
-# Contenido verificado (tabla 1 del artículo): 2,365 imágenes,
+# Contenido según la tabla 1 del artículo: 2,365 imágenes,
 # 42 categorías (41 nombradas + "unknown"), 13,216 objetos etiquetados.
 # Archivo único: EMDS7.zip, 5,308,086,590 bytes (~5.3 GB).
 EMDS7_FIGSHARE_ARTICLE_ID = 16869571
