@@ -11,26 +11,25 @@ y el estado del cultivo.
 
 **El flujo, en orden:**
 
-1. **Tus fotos** van en tu Google Drive, en `microalgas-ia/fotos/<clase>/`
-   (una subcarpeta por clase: `Chlorella_vulgaris`, `Scenedesmus_acutus`).
-   Etiqueta cada foto con lo que sabes: especie, día, luz, densidad contada
+1. **Las fotos propias** van en Google Drive, en `microalgas-ia/fotos/<clase>/`
+   (una subcarpeta por clase; por ejemplo: `Chlorella_vulgaris`, `Scenedesmus_acutus`).
+   Cada foto se etiqueta con lo que se sabe de ella: especie, día, luz, densidad contada
    en Neubauer, estado del cultivo.
 2. **Abre `microalgas-ia.ipynb` en Google Colab** (Entorno de ejecución →
    Cambiar tipo de entorno → **GPU**).
 3. **Corre las celdas de arriba a abajo.** El cuaderno descarga solo la
    colección pública EMDS-7 (~5.3 GB, la primera vez tarda varios minutos),
-   recorta los objetos por clase, suma tus fotos, entrena el modelo y lo
+   recorta los objetos por clase, suma las fotos propias, entrena el modelo y lo
    evalúa.
 4. **El modelo entrenado queda** en `Drive/microalgas-ia/modelos/`:
    `modelo_microalgas.h5` (Keras) y `modelo_microalgas.tflite` (para el
    teléfono, sin internet).
 
-Todo el entrenamiento se hace en Google Colab, con su GPU gratuita. En tu
-MacBook solo abres el cuaderno en el navegador.
+Todo el entrenamiento se ejecuta en Google Colab, con su GPU gratuita. El cuaderno se abre en el navegador, desde cualquier computadora.
 
-**Qué necesitas para empezar:** tus fotos de microscopio etiquetadas. Sin
-fotos propias el cuaderno entrena igual, solo con EMDS-7; tus clases entran
-al entrenamiento en cuanto subas las fotos y vuelvas a correrlo.
+**Qué se necesita para empezar:** fotos de microscopio etiquetadas. Sin
+fotos propias el cuaderno entrena igual, solo con EMDS-7; las clases propias entran
+al entrenamiento en cuanto se suban las fotos y se vuelva a correr.
 
 **Qué descarga el cuaderno por sí solo:** EMDS-7 (colección pública,
 2,365 imágenes). WHOI-Plankton no se descarga solo: se baja a mano
@@ -52,7 +51,7 @@ al entrenamiento en cuanto subas las fotos y vuelvas a correrlo.
 |---|---|
 | `microalgas-ia.ipynb` | Cuaderno de Colab (27 celdas, en español): descarga, recortes, splits, aumento, modelo, evaluación, exportación y conteo. |
 | `datos.py` | Módulo con el código de datos (descarga EMDS-7, recortes desde XML, splits, aumento, conteo OpenCV). El cuaderno lo importa. |
-| `indice-clases.csv` | Índice unificado de clases: 202 filas (EMDS-7, WHOI-Plankton y tus fotos) con fuente, URL, nº de imágenes/objetos, licencia y notas. |
+| `indice-clases.csv` | Índice unificado de clases: 202 filas (EMDS-7, WHOI-Plankton y las fotos propias) con fuente, URL, nº de imágenes/objetos, licencia y notas. |
 | `CLASE-paso-a-paso.md` | Clase paso a paso: cómo se construye este modelo desde cero, y cómo adaptar la misma receta a otros modelos (otros organismos, otras tareas). |
 | `build_notebook.py` | Generador del cuaderno (el `.ipynb` se regenera con `python3 build_notebook.py`). |
 | `smoke_test.py` | Prueba local de todo el flujo con datos sintéticos (sin Colab). |
@@ -101,8 +100,8 @@ al entrenamiento en cuanto subas las fotos y vuelvas a correrlo.
   No se incluye.
 - **Kaggle (National Data Science Bowl 2015):** requiere cuenta de Kaggle y
   no hay una URL pública del conjunto en el proyecto. No se incluye como ruta
-  principal; si lo consigues, sus imágenes van a `recortes/<clase>/` igual
-  que tus fotos.
+  principal; si se consigue, sus imágenes van a `recortes/<clase>/` igual
+  que las fotos propias.
 
 ## Límites
 

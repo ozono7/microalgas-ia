@@ -41,8 +41,8 @@ densidad de un cultivo. Corre en **Google Colab (nivel gratuito, GPU T4)**.
 - **WHOI-Plankton** (referencia): >3.5 millones de imágenes, 103 categorías.
   Su descarga directa está bloqueada por un captcha, así que
   en este cuaderno **no** se descarga: se documenta cómo obtenerla a mano.
-- **Tus fotos:** fotos de microscopio de tus cultivos de *Chlorella vulgaris*
-  y *Scenedesmus acutus*, en tu Drive. Son las clases propias del proyecto.
+- **Fotos propias:** fotos de microscopio de cultivos (por ejemplo,
+  *Chlorella vulgaris* y *Scenedesmus acutus*), en Google Drive. Son las clases propias del proyecto.
 
 **Límites honestos (léelos antes de entrenar)**
 
@@ -62,14 +62,14 @@ cells.append(md('''## Antes de empezar: qué necesitas
 
 1. Una cuenta de Google. Abre este cuaderno en **Colab** (Entorno de
    ejecución → Cambiar tipo de entorno → **GPU**). Todo el entrenamiento
-   se hace en Colab, con su GPU gratuita; en tu MacBook solo abres el
-   cuaderno en el navegador.
-2. Tus fotos en tu Google Drive, en `microalgas-ia/fotos/<clase>/` (una
+   se ejecuta en Colab, con su GPU gratuita. El cuaderno se abre en el
+   navegador, desde cualquier computadora.
+2. Las fotos propias en Google Drive, en `microalgas-ia/fotos/<clase>/` (una
    subcarpeta por clase):
 
 ```
 Drive/microalgas-ia/
-├── fotos/                  # tus fotos de microscopio
+├── fotos/                  # fotos propias de microscopio
 │   ├── Chlorella_vulgaris/
 │   └── Scenedesmus_acutus/
 ├── recortes/               # lo genera el cuaderno (EMDS-7 por clase)
@@ -175,20 +175,20 @@ plt.tight_layout()
 plt.show()
 '''.strip()))
 
-cells.append(md('''## 4. Tus fotos (opcional, pero son las clases propias)
+cells.append(md('''## 4. Fotos propias (opcional, pero son las clases propias)
 
-Si ya subiste fotos a `Drive/microalgas-ia/fotos/<clase>/`, esta celda las
+Si ya hay fotos en `Drive/microalgas-ia/fotos/<clase>/`, esta celda las
 copia al conjunto de recortes. Cada subcarpeta es una clase, por ejemplo:
 
-- `fotos/Chlorella_vulgaris/` — tus fotos de *Chlorella vulgaris*
-- `fotos/Scenedesmus_acutus/` — tus fotos de *Scenedesmus acutus*
+- `fotos/Chlorella_vulgaris/` — fotos de *Chlorella vulgaris*
+- `fotos/Scenedesmus_acutus/` — fotos de *Scenedesmus acutus*
 
-Etiqueta cada foto con lo que tú sabes (especie, día, luz, densidad contada
+Cada foto se etiqueta con lo que se sabe de ella (especie, día, luz, densidad contada
 en Neubauer, estado del cultivo) en el nombre del archivo o en una tabla
 aparte. Si aún no hay fotos, la celda lo dice y seguimos solo con EMDS-7.
 '''))
 
-cells.append(code('''# 4. Agregar tus fotos de Drive al conjunto (si existen)
+cells.append(code('''# 4. Agregar las fotos propias de Drive al conjunto (si existen)
 import shutil
 
 FOTOS = os.path.join(BASE_DRIVE, "fotos")
@@ -233,7 +233,7 @@ También existe **Plankton Set 1.0** (National Data Science Bowl 2015, NCEI
 accesión 0127422, DOI 10.7289/v5d21vjd, 121 clases): su enlace de descarga
 de NCEI es un disparador web, no un archivo directo; por eso tampoco se
 descarga aquí. Si lo consigues (Kaggle, con cuenta), sus imágenes van a
-`recortes/<clase>/` igual que tus fotos.
+`recortes/<clase>/` igual que las fotos propias.
 '''))
 
 cells.append(code('''# 5. Enlaces de WHOI-Plankton (solo informativos)
@@ -464,10 +464,10 @@ nada: anota siempre con qué aumento y qué cámara se tomó la foto.
 
 Abajo se demuestra con una **imagen sintética** (células oscuras sobre
 fondo claro, como en campo claro). Después, la misma función corre sobre
-tus fotos de Drive.
+las fotos propias de Drive.
 '''))
 
-cells.append(code('''# 11. Conteo de células: demo con imagen sintética + tu foto (si hay)
+cells.append(code('''# 11. Conteo de células: demo con imagen sintética + una foto propia (si hay)
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
@@ -502,7 +502,7 @@ plt.tight_layout()
 plt.show()
 '''.strip()))
 
-cells.append(code('''# 11b. Conteo sobre TU primera foto de Drive (si ya subiste alguna)
+cells.append(code('''# 11b. Conteo sobre una primera foto propia de Drive (si ya hay alguna)
 import glob
 
 candidatas = sorted(glob.glob(os.path.join(BASE_DRIVE, "fotos", "*", "*.jpg")) +
@@ -517,15 +517,15 @@ if candidatas:
     plt.axis("off")
     plt.show()
     print("Ajusta area_min/area_max y el umbral hasta que el conteo "
-          "coincida con tu conteo en Neubauer, y anota esos valores.")
+          "coincida con el conteo en Neubauer, y anota esos valores.")
 else:
     print("Aún no hay fotos en Drive/microalgas-ia/fotos/.")
 '''.strip()))
 
 cells.append(md('''## Qué sigue
 
-1. **Sube tus fotos** a `Drive/microalgas-ia/fotos/<clase>/` (unas cientos
-   por clase para empezar) y vuelve a correr desde la celda 4: tus clases
+1. **Subir las fotos propias** a `Drive/microalgas-ia/fotos/<clase>/` (unas cientos
+   por clase para empezar) y volver a correr desde la celda 4: las clases propias
    entran al entrenamiento automáticamente.
 2. **Más épocas / fine-tuning:** descongela las últimas capas de
    EfficientNetB0 y reentrena con tasa baja.

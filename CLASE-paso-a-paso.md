@@ -21,9 +21,9 @@ aquí está el razonamiento.
 - Fotos de microscopio, etiquetadas. Sin fotos no hay modelo: el modelo
   aprende de ejemplos, no de definiciones.
 - Una cuenta de Google y Google Colab con GPU (gratuito). Todo el
-  entrenamiento se hace en Colab; en tu MacBook solo abres el cuaderno
-  en el navegador.
-- Este repositorio (`ozono7/microalgas-ia`) y tu carpeta de Drive
+  entrenamiento se ejecuta en Colab; el cuaderno se abre en el navegador,
+  desde cualquier computadora.
+- Este repositorio (`ozono7/microalgas-ia`) y una carpeta de Drive
   `microalgas-ia/fotos/`.
 
 ---
@@ -31,7 +31,7 @@ aquí está el razonamiento.
 ## Paso 1. Juntar las fotos (el paso que decide todo)
 
 **Qué se hace:** tomar fotos de microscopio de cada organismo que el
-modelo debe reconocer, y anotar para cada foto lo que tú sabes: especie,
+modelo debe reconocer, y anotar para cada foto lo que se sabe: especie,
 día, luz, densidad contada en Neubauer, estado del cultivo.
 
 **Por qué:** el modelo no sabe biología. Lo único que aprende es la
@@ -47,7 +47,7 @@ error.
 - Anota siempre con qué aumento y qué cámara se tomó la foto: sin ese
   dato, el conteo no se puede convertir en densidad.
 
-**En el cuaderno:** sección 4 (tus fotos) y sección 11 (conteo).
+**En el cuaderno:** sección 4 (fotos propias) y sección 11 (conteo).
 
 ## Paso 2. Organizar por carpetas (una carpeta = una clase)
 
@@ -233,8 +233,8 @@ medida en test.
 
 | Paso | Sección del cuaderno |
 |---|---|
-| 1. Fotos | 4. Tus fotos |
-| 2. Carpetas por clase | 3. Recortes, 4. Tus fotos |
+| 1. Fotos | 4. Fotos propias |
+| 2. Carpetas por clase | 3. Recortes, 4. Fotos propias |
 | 3. train/val/test | 6. Particiones |
 | 4. Aumento | 7. Aumento de datos |
 | 5. Transfer learning | 8. Modelo |
