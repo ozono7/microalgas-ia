@@ -177,6 +177,12 @@ def preparar_splits(carpeta_recortes, carpeta_splits,
     entrenamiento quepa en el nivel gratuito de Colab).
     Devuelve un dict {clase: {'train': n, 'val': n, 'test': n}}.
     """
+    if not os.path.isdir(carpeta_recortes):
+        raise FileNotFoundError(
+            f"No existe la carpeta de recortes: {carpeta_recortes}. "
+            "Esa carpeta la crea la sección 3 (recortar objetos de EMDS-7). "
+            "Corre las celdas en orden: primero la sección 2 (descargar EMDS-7) "
+            "y luego la sección 3, y vuelve a correr esta celda.")
     rng = random.Random(semilla)
     resumen = {}
     for clase in sorted(os.listdir(carpeta_recortes)):

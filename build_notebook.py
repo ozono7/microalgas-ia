@@ -105,7 +105,13 @@ from google.colab import drive
 drive.mount("/content/drive")
 
 REPO_DIR = "/content/microalgas-ia"
-if not os.path.exists(os.path.join(REPO_DIR, "datos.py")):
+if os.path.exists(os.path.join(REPO_DIR, ".git")):
+    # El repo ya estaba clonado: actualizarlo para traer los últimos cambios.
+    r = subprocess.run(["git", "-C", REPO_DIR, "pull"],
+                       capture_output=True, text=True)
+    print(r.stdout[-500:] if r.stdout else "")
+    print(r.stderr[-500:] if r.stderr else "")
+elif not os.path.exists(os.path.join(REPO_DIR, "datos.py")):
     r = subprocess.run(["git", "clone",
                         "https://github.com/ozono7/microalgas-ia.git",
                         REPO_DIR], capture_output=True, text=True)
