@@ -522,6 +522,60 @@ else:
     print("Aún no hay fotos en Drive/microalgas-ia/fotos/.")
 '''.strip()))
 
+cells.append(md('''## 12. Clasificar una foto nueva
+
+Ya entrenado el modelo, esta es la parte que se usa todos los días: subir
+una foto de microscopio y ver qué organismo dice el modelo que es, con su
+confianza en %. Funciona de dos formas: subir una foto con el botón, o
+escribir la ruta de una foto que ya esté en Drive (por ejemplo, una de
+`microalgas-ia/fotos/`). Si el cuaderno se acaba de abrir y el modelo no
+está en memoria, se carga solo el archivo exportado en
+`Drive/microalgas-ia/modelos/modelo_microalgas.h5`.
+'''))
+
+cells.append(code('''# 12. Clasificar una foto nueva: subir una imagen y ver qué organismo es
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+import tensorflow as tf
+from google.colab import files
+
+# Si el modelo no está en memoria (cuaderno recién abierto), se carga el
+# exportado en Drive.
+try:
+    modelo
+except NameError:
+    ruta_h5 = os.path.join(BASE_DRIVE, "modelos", "modelo_microalgas.h5")
+    modelo = tf.keras.models.load_model(ruta_h5)
+    with open(os.path.join(BASE_DRIVE, "modelos", "clases.txt")) as f:
+        CLASES = [l.strip() for l in f if l.strip()]
+    print("Modelo cargado de Drive:", ruta_h5)
+
+# Ruta de una foto en Drive (vacío = subir una con el botón).
+# Ejemplo: "Drive/microalgas-ia/fotos/Chlorella_vulgaris/foto1.jpg"
+RUTA_FOTO = ""
+if not RUTA_FOTO:
+    print("Sube una foto de microscopio:")
+    subidas = files.upload()
+    RUTA_FOTO = list(subidas.keys())[0]
+
+img = Image.open(RUTA_FOTO).convert("RGB").resize((224, 224))
+x = np.expand_dims(np.array(img), 0)
+probs = modelo.predict(x, verbose=0)[0]
+top3 = np.argsort(probs)[::-1][:3]
+
+plt.figure(figsize=(6, 6))
+plt.imshow(Image.open(RUTA_FOTO).convert("RGB"))
+plt.axis("off")
+plt.title("Foto: " + os.path.basename(RUTA_FOTO))
+plt.show()
+
+print("El modelo dice:")
+for i in top3:
+    print(f"  {CLASES[i]}: {probs[i] * 100:.1f}%")
+'''.strip()))
+
 cells.append(md('''## Qué sigue
 
 1. **Subir las fotos propias** a `Drive/microalgas-ia/fotos/<clase>/` (unas cientos

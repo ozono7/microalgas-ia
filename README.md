@@ -27,6 +27,9 @@ y el estado del cultivo.
 4. **El modelo entrenado queda** en `Drive/microalgas-ia/modelos/`:
    `modelo_microalgas.h5` (Keras) y `modelo_microalgas.tflite` (para el
    teléfono, sin internet).
+5. **Probar con una foto nueva:** la última sección del cuaderno
+   (12. Clasificar una foto nueva) permite subir una foto de microscopio
+   y ver qué organismo dice el modelo que es, con su confianza en %.
 
 Todo el entrenamiento se ejecuta en Google Colab, con su GPU gratuita. El cuaderno se abre en el navegador, desde cualquier computadora.
 

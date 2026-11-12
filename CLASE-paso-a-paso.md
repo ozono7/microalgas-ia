@@ -242,3 +242,4 @@ medida en test.
 | 7. Evaluar | 9. Evaluación |
 | 8. Exportar | 10. Exportar el modelo |
 | 9. Contar y densidad | 11. Densidad celular |
+| 10. Clasificar una foto nueva | 12. Clasificar una foto nueva |
