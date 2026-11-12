@@ -1,5 +1,7 @@
 # Identificación de microalgas y organismos acuáticos con TensorFlow
 
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ozono7/microalgas-ia/blob/main/microalgas-ia.ipynb)
+
 Proyecto para **identificar microalgas y otros organismos acuáticos en fotos
 de microscopio** y **contar células** para estimar la densidad de un cultivo.
 
@@ -15,8 +17,9 @@ y el estado del cultivo.
    (una subcarpeta por clase; por ejemplo: `Chlorella_vulgaris`, `Scenedesmus_acutus`).
    Cada foto se etiqueta con lo que se sabe de ella: especie, día, luz, densidad contada
    en Neubauer, estado del cultivo.
-2. **Abre `microalgas-ia.ipynb` en Google Colab** (Entorno de ejecución →
-   Cambiar tipo de entorno → **GPU**).
+2. **Abre el cuaderno en Google Colab** con el botón "Abrir en Colab" de arriba
+   (o en https://colab.research.google.com/github/ozono7/microalgas-ia/blob/main/microalgas-ia.ipynb).
+   En Colab, ve a Entorno de ejecución → Cambiar tipo de entorno → **GPU**.
 3. **Corre las celdas de arriba a abajo.** El cuaderno descarga solo la
    colección pública EMDS-7 (~5.3 GB, la primera vez tarda varios minutos),
    recorta los objetos por clase, suma las fotos propias, entrena el modelo y lo
