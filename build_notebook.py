@@ -288,7 +288,7 @@ aleatorias cada vez que el modelo ve una imagen:
 
 Así el modelo aprende a reconocer la célula la vea como la vea, y no se
 memoriza las fotos de entrenamiento. El aumento **solo** se aplica al
-entrenamiento, nunca a validación ni a test (ahí se mide con fotos reales).
+entrenamiento, nunca a validación ni a test (ahí se mide con fotos).
 
 > **Ojo con el conteo:** para clasificar, el aumento vale. Para **detectar
 > y contar** células, el aumento **no debe recortar** la imagen, porque
